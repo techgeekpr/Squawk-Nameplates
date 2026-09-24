@@ -117,6 +117,18 @@ function BD:InitDatabase()
 	BD.db = fill(SquawkNamePlatesDB.profiles[key], copy(BD.Defaults))
 end
 
+-- A secret number passes type() as "number" and throws the moment it is
+-- compared, so prove both operations before trusting one.
+function BD.SafeNumber(value)
+	local ok, result = pcall(function()
+		local n = value + 0
+		local _ = n > 0
+		return n
+	end)
+	if ok and type(result) == "number" then return result end
+	return nil
+end
+
 function BD:Print(msg)
 	DEFAULT_CHAT_FRAME:AddMessage("|cffff7d0aSquawk NamePlates:|r " .. tostring(msg))
 end
@@ -183,9 +195,10 @@ function BD:FindBest(unit)
 				category = category,
 				name = name,
 				icon = icon,
-				count = tonumber(count),
-				duration = tonumber(duration),
-				expires = tonumber(expires),
+				-- plain numbers only: the icon compares these later
+				count = BD.SafeNumber(count),
+				duration = BD.SafeNumber(duration),
+				expires = BD.SafeNumber(expires),
 			}
 		end
 		return false
