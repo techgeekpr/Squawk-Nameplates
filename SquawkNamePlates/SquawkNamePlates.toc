@@ -1,0 +1,30 @@
+## Interface: 11601
+## Title: Squawk NamePlates
+## Notes: Oversized crowd control, cooldown and potion icons on enemy nameplates. Made by Avoid Me of <Squawk>.
+## Version: 1.0.0
+## Author: Avoid Me <Squawk>
+## SavedVariables: SquawkNamePlatesDB
+## IconTexture: Interface\Icons\Spell_Nature_Polymorph
+
+# SavedVariables restore shim: this client writes settings but never restores
+# them, so we load last session's file ourselves through these junctions.
+SV1\SquawkNamePlates.lua
+Restore1.lua
+SV2\SquawkNamePlates.lua
+Restore2.lua
+SV3\SquawkNamePlates.lua
+Restore3.lua
+
+# Settings saved while the addon was still called BigPvP, read once and
+# carried over by Core.lua.
+SV1\BigPvP.lua
+Legacy1.lua
+SV2\BigPvP.lua
+Legacy2.lua
+SV3\BigPvP.lua
+Legacy3.lua
+
+Core.lua
+Spells.lua
+Display.lua
+Options.lua
