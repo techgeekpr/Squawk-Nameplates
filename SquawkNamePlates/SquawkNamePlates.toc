@@ -27,4 +27,5 @@ Legacy3.lua
 Core.lua
 Spells.lua
 Display.lua
+Colors.lua
 Options.lua

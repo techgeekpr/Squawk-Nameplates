@@ -55,6 +55,13 @@ BD.Defaults = {
 		onlyPlayers = true,
 	},
 
+	-- Health bar colours, and the optional link to Squawk Spy.
+	classColors = true,
+	kosHighlight = true,    -- show a marker beside plates on Spy's KoS lists
+	kosIconSize = 20,
+	chickenIcon = "",      -- override the guild-KoS icon path if you have a better one
+	tellSpy = true,         -- forward new plates to Spy; a no-op without it
+
 	categories = {
 		cc = true, immunity = true, defensive = true,
 		offensive = true, potion = true, racial = true,
@@ -272,6 +279,8 @@ local function handleSlash(msg)
 		BD.Display:Test()
 	elseif cmd == "diag" then
 		BD.Display:Diagnostics()
+	elseif cmd == "colors" or cmd == "colours" then
+		BD.Colors:Diagnostics()
 	elseif cmd == "plates" then
 		local set = (C_CVar and C_CVar.SetCVar) or SetCVar
 		if set then
@@ -304,7 +313,7 @@ boot:SetScript("OnEvent", function()
 		return
 	end
 
-	for _, module in ipairs({ "Display", "Options" }) do
+	for _, module in ipairs({ "Display", "Colors", "Options" }) do
 		local ok, err = pcall(function() BD[module]:Initialize() end)
 		if not ok then BD:Print(("|cffff0000%s failed:|r %s"):format(module, tostring(err))) end
 	end

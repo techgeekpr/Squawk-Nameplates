@@ -10,6 +10,33 @@ that player right now. Built for PvP: you should be able to tell at a glance
 that the warrior is in Recklessness, the rogue just popped Evasion, or the
 mage is sitting in Ice Block — without reading a row of tiny debuff squares.
 
+## Class colours and Kill on Sight markers
+
+Health bars are coloured by class — druid orange, paladin pink, shaman blue,
+mage light blue and the rest.
+
+Finding the health bar is the only hard part. Blizzard has moved it more than
+once (`UnitFrame.healthBar`, `UnitFrame.healthbar`, and later
+`HealthBarsContainer.healthBar`), and this is a Midnight UI running Classic
+content, so each known shape is tried in turn and the plate's children are
+searched for a `StatusBar` if none match. Blizzard repaints the bar on its own
+updates, so the colour is re-applied on a sweep rather than set once.
+
+If [Squawk Spy](https://github.com/techgeekpr/Squawk-Spy) is installed, plates
+for players on its Kill on Sight lists get a marker to the left of the plate —
+a skull for your own list, a chicken for the guild list. The bar keeps its
+class colour: one signal per channel reads better than a colour that means two
+different things.
+
+The link is optional in both directions. Every call checks the other addon
+exists and goes through `pcall`, so running either one without the other
+produces no errors. `/snp colors` reports what it found.
+
+Which icon file holds a chicken cannot be known without asking the client, so
+several paths are probed with `GetTextureFileID` and the first that resolves is
+used — `SetTexture` never fails, so a missing icon otherwise looks exactly like
+a working one until you see the blank square. Set `chickenIcon` to override it.
+
 ## Priority
 
 A unit usually has several things worth knowing about. Only the most
@@ -107,6 +134,7 @@ accepted clicks would swallow the click meant for the plate underneath.
 ```
 /snp              open the options (also /squawknameplates, /bd)
 /snp diag         nameplate API, cvar state, plates visible, icons showing
+/snp colors       class colouring, the Spy link, and which chicken icon resolved
 /snp test         put a marker on every visible nameplate for five seconds
 /snp plates       turn enemy nameplates on at maximum draw distance
 /snp scan         list your target's auras and the category each maps to
@@ -123,4 +151,5 @@ If icons do not appear, `/snp diag` will usually say why in one line.
 | `Core.lua` | database, restore shim, guarded aura reading, priority resolution, slash commands |
 | `Spells.lua` | the generated spell tables and the id and name lookups |
 | `Display.lua` | the icon, the nameplate pool, timers, diagnostics |
+| `Colors.lua` | class colours, Kill on Sight markers, the optional Squawk Spy link |
 | `Options.lua` | options panel |
